@@ -54,6 +54,19 @@ Other AudioDeck instances on the same LAN are discovered automatically via mDNS.
   logs/               ← rotating application logs
 ```
 
+### Changing recording / log paths
+
+AudioDeck's **Settings → Paths** tab lets you edit where recordings, logs, and the database live. Recording and log paths take effect immediately (no restart); the database path requires a restart.
+
+**Inside Docker**, the path you pick must resolve to one of the container's bind-mounted volumes — the process can't write outside them. The generated compose mounts:
+
+| Host path                        | Container path      |
+|----------------------------------|---------------------|
+| `~/audiodeck/recordings`         | `/app/recordings`   |
+| `~/audiodeck/logs`               | `/app/logs`         |
+
+To record into a new host directory, add another volume to `~/audiodeck/docker-compose.yml` (e.g. `- /srv/stream/backup:/app/backup`), restart the stack with `docker compose up -d`, then set **Settings → Paths → Recordings directory** to `/app/backup`.
+
 ### Ports
 
 | Port   | Protocol | Purpose                               |
